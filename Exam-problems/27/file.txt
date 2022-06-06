@@ -1,0 +1,4 @@
+/home/students/s62372/random/passwd_symlink -> /etc/passwd
+/home/students/s62372/07 -> /srv/fmi-os/sample_code/07.c.processes/
+/home/students/s62372/08 -> /srv/fmi-os/sample_code/08.c.pipes/
+/home/students/s62372/06 -> /srv/fmi-os/sample_code/06.c.file.input.output
