@@ -1,0 +1,3 @@
+1)  cat /etc/passwd | egrep --color "^s[0-9]*:.:[0-9]*:$(cat /etc/passwd | sort -n -t : -k 3 | head -n 201 | tail -n 1 | awk -F : '{print $4}')" | sort -n -t : -k 1 | cut -d : -f 5,6 | sed -r 's/,.*:/:/g'
+2) cat /etc/passwd | egrep "^s[[:digit:]]+:x:[[:digit:]]+:$(cat /etc/passwd | sort -n -t ':' -k 3 | head -n 201 | tail -n 1 | cut -d : -f 4):" | cut -d : -f1,5,6 | sort -n -t ':' -k 1 | cut -d : -f 2- | cut -d , -f 1,5 | sed 's/,.*:/:/'
+3) egrep "^([^:]+:){3}$(sort -t ':' -k 3,3 -n /etc/passwd | head -n 201 | tail -n 1 | cut -d ':' -f 4)" /etc/passwd | cut -c 2- | sort -n -t ':' -k 1,1 | awk -F ':' '{print $6":"$5}' | cut -d ',' -f 1 | awk -F ':' '{print $2":"$1}'

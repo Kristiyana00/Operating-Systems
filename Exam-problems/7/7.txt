@@ -1,0 +1,2 @@
+1) find ~pesho -type f -printf "%n %T@ %i\n" 2>/dev/null | awk '$1 > 1 { print $2, $3 }' | sort -nr | head -n 1 | awk '{print $2}'
+2) find ~pesho -type f -printf "%n %T@ %i\n" 2>/dev/null | egrep -v '^1' | sort -nr -k 2 | head -n 1 | cut -d ' ' -f 3

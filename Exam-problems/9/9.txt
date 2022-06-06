@@ -1,0 +1,2 @@
+1) cat planets.txt | tr ';' "\t" | tail -n +2 | sort -n -k 3 | egrep "$(cat planets.txt | tr ';' "\t" | tail -n +2 | sort -nr -k 3 | head -n 1 | awk '{print $2}')" | head -n 1 | awk '{print $1,$4}'
+2) egrep "^[^;]+;$(tail -n +2 planets.txt | sort -t ';' -k 3,3 -n | tail -n 1 | awk -F ';' '{print $2}');" planets.txt | sort -t ';' -k 3,3 -n | head -n 1 | awk -F ';' '{print $1"\t"$4}'

@@ -1,0 +1,2 @@
+1)find ~ -type f -size 0 -exec rm -i {} \;
+2)

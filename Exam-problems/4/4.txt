@@ -1,0 +1,2 @@
+1) cat /etc/passwd | egrep '^s[0-9]{5,6}:x:[0-9]{4}:[0-9]{3}:.*а\>,,,,И:' | cut -c 3-4 | sort | uniq -c | sort -nr -k1 | head -n 1
+2) awk -F ':' '$4==502' /etc/passwd | tr ',' ':' | cut -d ':' -f 1,5 | grep 'a$' | cut -c 3,4 | sort | uniq -c | sort -nr -k 1 | head -n 1
