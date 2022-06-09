@@ -42,7 +42,7 @@ for f ; do
 		NSN="{$D}00"
 	else
 		M=$(( $N + 1 ))
-		NSN="${Y}$(printf '%02d' $M))
+		NSN="${Y}$(printf '%02d' $M)"
 	fi
 
 	sed -E -i "s/$SN/$NSN/" $f
