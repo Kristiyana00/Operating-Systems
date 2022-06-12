@@ -3,8 +3,8 @@ t.init(0)
 
 process P   process Q
    p1          q1
-s.signal()   s.wait()
- t.wait()   t.signal()
+s.signal()  t.signal()
+ t.wait()    s.wait()
    p2          q2
 t.signal()  s.signal()
  s.wait()    t.wait()
