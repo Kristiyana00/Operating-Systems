@@ -1,0 +1,13 @@
+semaphore m, s
+m.init(1)
+s.init(0)
+int cnt = 0
+
+process P     process Q     process R
+   p_1           q_1         s.wait()
+   p_2           q_2        s.signal()
+m.wait()       m.wait()        r_1
+  cnt++          cnt++         r_2
+if (cnt==2)    if (cnt==2)
+  s.signal()      s.signal()
+m.signal()     m.signal()
