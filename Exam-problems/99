@@ -1,0 +1,28 @@
+Първи начин:
+t1.init(0)
+t2.init(0)
+
+ process P   process Q
+    p1          q1
+t1.signal() t2.signal()
+ t2.wait()   t1.wait()
+    p2          q2
+t2.signal() t1.signal()
+-------------------------------------
+Втори начин:
+semaphore t1,t2,m
+t1.init(0)
+t2.init(0)
+m.init(1)
+int c1=0, c2=0
+
+process P     process Q
+   p_1           q_1
+ m.wait()      m.wait()
+if c1=0        if c2=0
+   c1=1           c2=1
+   t1.signal()    t2.signal()
+m.signal()     m.signal()
+t2.wait()      t1.wait()
+t2.signal()    t1.signal()
+   p_2            q_2
