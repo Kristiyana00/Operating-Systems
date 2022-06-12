@@ -1,3 +1,4 @@
+Първи начин:
 semaphore m, s
 m.init(1)
 s.init(0)
@@ -11,3 +12,27 @@ m.wait()       m.wait()        r_1
 if (cnt==2)    if (cnt==2)
   s.signal()      s.signal()
 m.signal()     m.signal()
+----------------------------------------
+Втори начин:
+semaphore sp, sq
+sp.init(0)
+sq.init(0)
+
+process P      process Q      process R
+   p_1            q_1         sp.wait()
+   p_2            q_2         sp.signal()
+sp.signal()    sq.signal()    sq.wait()
+                              sq.signal()
+                                 r_1
+                                 r_2
+----------------------------------------    
+Трети начин:
+semaphore sp, sq
+sp.init(0)
+sq.init(0)
+
+process P      process Q      process R
+   p_1            q_1         sq.wait()
+   p_2            q_2         sq.signal()
+sp.signal()    sp.wait()         r_1
+               sq.signal()       r_2
