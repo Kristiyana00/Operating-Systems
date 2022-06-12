@@ -1,0 +1,14 @@
+int cnt = 0
+s.init(1)
+m.init(0)
+
+process P
+s.wait()
+   p1
+ cnt++
+if(cnt==3)
+  m.signal()
+s.signal()
+m.wait()
+   p2
+m.signal()
