@@ -1,0 +1,8 @@
+s_p.init(1)
+s_q.init(0)
+
+process P      process Q
+s_p.wait()     s_q.wait()
+   p1             q1
+   p2             q2
+s_q.signal()   s_p.signal()
