@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+        echo "Incorrect number of arguments."
+        exit 1
+fi
+
+if [ ! -f $1 ]; then
+        echo "$1 is not a file."
+        exit 2
+fi
+
+if [ ! -r $1 ]; then
+        echo "$1 is not readable."
+        exit 3
+fi
+
+file=$(mktemp)
+
+while read line; do
+        http=$(cat $1 | egrep "$line" | egrep "HTTP/2.0" | wc -l)
+        non_http=$(cat $1 | egrep "$line" | egrep -v "HTTP/2.0" | wc -l)
+        echo "$line HTTP/2.0: $http non-HTTP/2.0: $non_http" >> $file
+done < <(cat "$1" | cut -d " " -f 2 | sort | uniq)
+
+clients=$(mktemp)
+
+while read line; do
+        code=$(cat $1 | egrep "$line" | cut -d ' ' -f 9)
+        if [ $code -gt 302 ]; then
+                echo $line >> $clients
+        fi
+done < <(cat $1 | cut -d " " -f 1 | sort | uniq)
+
+final=$(mktemp)
+
+cat $file >> $final
+
+cat $clients | sort | uniq -c | sort -nr -k 1 >> $final
+
+cat $final
+
+exit 0
