@@ -1,1 +1,2 @@
-find /home/students/ -mindepth 1 -maxdepth 1 -type d -printf "%C@ %p\n" | awk '$1 > 1621168000 && $1 < 1651176100 {print $1, $2}'
+1) find /home/students/ -mindepth 1 -maxdepth 1 -type d -printf "%C@ %p\n" | awk '$1 > 1621168000 && $1 < 1651176100 {print $1, $2}'
+2)  cat /etc/passwd | egrep "$(find /home/students/ -mindepth 1 -maxdepth 1 -type d -printf "%C@ %p\n" | awk '$1 > 1621168000 && $1 < 1651176100 {print $2}')" | cut -c 2- | awk -F : '{print $1" "$5}' | sed -r 's/,,,,.//'
