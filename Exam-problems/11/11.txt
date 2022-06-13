@@ -1,1 +1,2 @@
-find ~velin -inum $(find ~velin -type f 2>/dev/null -printf "%T@ %i %p\n" | sort -n -k1 | tail -n 1 | awk '{print $2}') | egrep -o '.' | egrep '/' | wc -l
+1) find ~velin -inum $(find ~velin -type f 2>/dev/null -printf "%T@ %i %p\n" | sort -n -k1 | tail -n 1 | awk '{print $2}') | egrep -o '.' | egrep '/' | wc -l
+2) find ~velin -inum $(find ~velin -type f 2>/dev/null -printf "%T@ %i %p\n" | sort -n -k 1 | tail -n 1 | awk '{print $2}') -printf "%p %d\n" | sort -n -k 2 | head -n 1
