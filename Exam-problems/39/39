@@ -25,18 +25,18 @@ mkdir -p "$DST/by-title"
 
 JPG=$(mktemp)
 
-find $SRC -type f -name "*.jpg" > "${JPG}"
+find "${SRC}" -type f -name "*.jpg" > "${JPG}"
 
 while read line; do
-        TITLE=$(basename $line | cut -d '.' -f 1 | sed -E 's/[(][^)]*[)]//g' | awk '$1=$1')
+        TITLE=$(basename "${line}" | cut -d '.' -f 1 | sed -E 's/[(][^)]*[)]//g' | awk '$1=$1')
         ALBUM=""
-        if [ $(basename $line | egrep "\(.+\)" | wc -l) -eq 0 ]; then
+        if [ $(basename "${line}" | egrep "\(.+\)" | wc -l) -eq 0 ]; then
                 ALBUM=$(echo "misc")
         else
-                ALBUM=$(basename $line | rev | cut -d ')' -f 2 | cut -d '(' -f 1 | rev)
+                ALBUM=$(basename "${line}" | rev | cut -d ')' -f 2 | cut -d '(' -f 1 | rev)
         fi
-        DATE=$(stat -c "%y" | cut -d " " -f 1)
-        HASH=$(sha256 $line | cut -c 1-16)
+        DATE=$(stat -c "%y" "${line}" | cut -d " " -f 1)
+        HASH=$(sha256sum "${line}" | cut -c 1-16)
 
         cp "${line}" "${DST}/images/${HASH}.jpg"
 
