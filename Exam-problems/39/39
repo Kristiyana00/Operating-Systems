@@ -1,0 +1,50 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+        echo "Invalid number of arguments."
+        exit 1
+fi
+
+SRC=$1
+DST=$2
+
+if [ ! -d $SRC ]; then
+        echo "$1 is not a directory."
+        exit 2
+fi
+
+if [ ! -r $SRC ]; then
+        echo "$1 is not readable."
+        exit 3
+fi
+
+mkdir -p "$DST/images"
+mkdir -p "$DST/by-date"
+mkdir -p "$DST/by-album"
+mkdir -p "$DST/by-title"
+
+JPG=$(mktemp)
+
+find $SRC -type f -name "*.jpg" > "${JPG}"
+
+while read line; do
+        TITLE=$(basename $line | cut -d '.' -f 1 | sed -E 's/[(][^)]*[)]//g' | awk '$1=$1')
+        ALBUM=""
+        if [ $(basename $line | egrep "\(.+\)" | wc -l) -eq 0 ]; then
+                ALBUM=$(echo "misc")
+        else
+                ALBUM=$(basename $line | rev | cut -d ')' -f 2 | cut -d '(' -f 1 | rev)
+        fi
+        DATE=$(stat -c "%y" | cut -d " " -f 1)
+        HASH=$(sha256 $line | cut -c 1-16)
+
+        cp "${line}" "${DST}/images/${HASH}.jpg"
+
+        ln -s "${DST}/images/${HASH}.jpg" "${DST}/by-date/${DATE}/by-album/${ALBUM}/by-title/${TITLE}.jpg"
+        ln -s "${DST}/images/${HASH}.jpg" "${DST}/by-date/${DATE}/by-title/${TITLE}.jpg"
+        ln -s "${DST}/images/${HASH}.jpg" "${DST}/by-album/${ALBUM}/by-date/${DATE}/by-title/${TITLE}.jpg"
+        ln -s "${DST}/images/${HASH}.jpg" "${DST}/by-album/${ALBUM}/by-title/${TITLE}.jpg"
+        ln -s "${DST}/images/${HASH}.jpg" "${DST}/by-title/${TITLE}.jpg"
+done < "${JPG}"
+
+rm -- "${JPG}"
