@@ -29,7 +29,7 @@ cat "${FILE}" | grep "${FIRST_SITE}" | sed -E 's/(.*)+HTTP//' | cut -d " " -f 2 
 
 FS_WITH_CODES=$(mktemp)
 while read line; do
-	cat "${FILE}" | cat "${FIRST_SITE}" | grep "${line}" >> "${FS_WITH_CODES}"
+	cat "${FILE}" | egrep "${FIRST_SITE}" | grep "${line}" >> "${FS_WITH_CODES}"
 done < "${FS_CODES}"
 
 FS_TOP5=$(mktemp)
@@ -40,7 +40,7 @@ cat "${FILE}" | grep "${SECOND_SITE}" | sed -E 's/(.*)+HTTP//' | cut -d " " -f 2
 
 SS_WITH_CODES=$(mktemp)
 while read line; do
-    cat "${FILE}" | cat "${SECOND_SITE}" | grep "${line}" >> "${SS_WITH_CODES}"
+    cat "${FILE}" | egrep "${SECOND_SITE}" | grep "${line}" >> "${SS_WITH_CODES}"
 done < "${SS_CODES}"
 
 SS_TOP5=$(mktemp)
@@ -51,7 +51,7 @@ cat "${FILE}" | grep "${THIRD_SITE}" | sed -E 's/(.*)+HTTP//' | cut -d " " -f 2 
 
 TS_WITH_CODES=$(mktemp)
 while read line; do
-    cat "${FILE}" | cat "${THIRD_SITE}" | grep "${line}" >> "${TS_WITH_CODES}"
+    cat "${FILE}" | egrep "${THIRD_SITE}" | grep "${line}" >> "${TS_WITH_CODES}"
 done < "${TS_CODES}"
 
 TS_TOP5=$(mktemp)
