@@ -2,52 +2,43 @@
 
 FQDN="([a-z0-9]+\.)+"
 TTL="[0-9]*"
-#purviqt red  SOA
 
 SOA="$FQDN\s+$TTL\s+IN\s+SOA\s+$FQDN\s+$FQDN"
-#SOAS - single
+
 SOAS="$SOA\s+([0-9]+\s+){4}[0-9]+"
-#SOAM - mult
 SOAM="$SOA\s+\("
 
-for f ; do
-        h=$(head -n 1 $f)
+for line ; do
+        header=$(cat $line | head -n 1)
 
-        r=$(echo "$h" | egrep "${SOAS}|${SOAM}" | wc -l)
+        check=$(echo $header | egrep "${SOAS}|${SOAM}" | wc -l)
 
-        if [ "${r}" -eq 0 ]; then
-                echo "$f : problem."
+        if [ $check -eq 0 ]; then
+                echo "$line: problem."
                 continue
         fi
 
-        r=$(echo "$h" | egrep "${SOAS}|${SOAM}" | wc -l)
-
-        if [ $r -eq 1 ]; then
-                # SN - serial number
-                SN=$(echo "$h" | rev | awk '{print $5}' | rev )
-        else
-                SN=$(head -n 2 "$f" | tail -n 1 | cut -d ';' -f 1)
+        if [ $(echo $header | egrep "$SOAS" | wc -l) -eq 1 ]; then
+                SN=$(echo $header | rev | awk '{print $5}' | rev)
+        elif [ $(echo $header | egrep "$SOAM" | wc -l) -eq 1 ]; then
+                SN=$(cat $line | head -n 2 | tail -n 1 | cut -d ';' -f 1 | tr -d ' ')
         fi
 
-        Y=$(echo "$SN" | cut -c 1-8)
-        N=$(echo "$SN" | cut -c 9-10)
+        Y=$(echo $SN | cut -c 1-8)
+        N=$(echo $SN | cut -c 9-10)
         D=$(date +%Y%m%d)
+
         if [ $N -eq 99 ]; then
-                echo "$f : 99 mods."
-                continue;
+                echo "$line: 99 mods."
+                continue
         fi
 
         if [ $Y -lt $D ]; then
-                #new serial number
                 NSN="${D}00"
         else
-                M=$(( $N + 1 ))
-                NSN="${Y}$(printf '%02d' $M)"
+                tochange=$(expr $N + 1)
+                NSN="${Y}$(printf '%02d' $tochange)"
         fi
 
-        sed -E -i "s/$SN/$NSN/" $f
-
+        sed -E -i "s|$SN|$NSN|" $line
 done
-
-exit 0
-
