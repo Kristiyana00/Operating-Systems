@@ -1,8 +1,25 @@
 #!/bin/bash
 
+if [ $# -ne 2 ]; then
+        echo "error"
+        exit 1
+fi
+
+if [ ! -f "${1}" ]; then
+        echo "error."
+        exit 2
+fi
+
+if [ ! -r "${2}" ]; then
+        echo "error"
+        exit 3
+fi
+
+touch $2
+
 nums_file=$(mktemp)
 
-xxd foo.bin | cut -c 11-49 | tr ' ' '\n' | tr -s '\n' > "${nums_file}"
+xxd "${1}" | cut -c 11-49 | tr ' ' '\n' | tr -s '\n' > "${nums_file}"
 
 num_nums="$(cat "${nums_file}" | wc -l)"
 
