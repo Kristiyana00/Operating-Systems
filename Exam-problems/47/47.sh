@@ -35,7 +35,7 @@ DST="${2}"
 
 for i in $(find "${SRC}" -type f 2>/dev/null); do
         if [ $(echo $(basename $i) | egrep "^\..*\.swp$" | wc -l) -ne 0 ]; then
-                tocheck=$(echo $(basename $i) | cut -d '.' -f 2)
+                tocheck=$(echo $(basename $i) | cut -d '.' -f 2- | rev | cut -d '.' -f 2- | rev)
                 if [ $(find $(dirname $i) -maxdepth 1 -name "${tocheck}" | wc -l) -ne 0 ]; then
                         continue
                 fi
