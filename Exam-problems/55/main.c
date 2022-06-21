@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 
 	struct triple tr;
 	
-	while (read(fd3, &tr, sizeof(tr)) == sizeof(tr)) {
+	while (read(fd1, &tr, sizeof(tr)) == sizeof(tr)) {
 		if (lseek(fd3, tr.offset, SEEK_SET) == -1){
 			int olderrno = errno;
 			close(fd1);
